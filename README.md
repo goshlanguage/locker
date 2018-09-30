@@ -14,6 +14,10 @@ See also:
 
 Let's start with the two fundmental components of a container, namespaces and cgroups. 
 
+# Caveats #
+
+Currently, Mac OS doesn't support a lot of the features that are required for good namespace isolation, such as mounts and more. For that reason, this ships with a docker container. Is it super ironic to use a container runtime to build a container runtime? We didn't think so either.  
+
 
 # Namespaces #
 

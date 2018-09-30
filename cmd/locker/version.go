@@ -12,7 +12,8 @@ func newVersionCmd(args []string) *cobra.Command {
 		Short: "version",
 		Long:  "Get locker version",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("0.0.3")
+
+			fmt.Println("0.0.5")
 		},
 	}
 

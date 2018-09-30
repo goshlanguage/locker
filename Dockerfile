@@ -9,6 +9,13 @@ COPY . /go/src/github.com/ryanhartje/locker/
 RUN cd /go/src/github.com/ryanhartje/locker && \
     dep ensure -vendor-only
 
-WORKDIR /go/src/github.com/ryanhartje/locker/cmd/locker
+WORKDIR /go/src/github.com/ryanhartje/locker/
 
-ENTRYPOINT [ "go", "test" ]
+RUN make build
+
+
+FROM debian:stretch-slim  
+
+COPY --from=0 /go/src/github.com/ryanhartje/locker/bin/locker /bin/locker
+RUN chmod +x /bin/locker
+

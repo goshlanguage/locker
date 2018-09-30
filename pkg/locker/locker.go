@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"syscall"
 
 	"github.com/satori/go.uuid"
 )
@@ -30,12 +31,15 @@ func NewLocker(name string, command []string) Locker {
 	}
 	id := uuid.NewV4().String()
 
-	process := exec.Command(command[0], command[1:]...)
+	process := exec.Command("/proc/self/exe", append([]string{"child"}, command[1:]...)...)
 
 	process.Stdin = os.Stdin
 	process.Stdout = os.Stdout
 	process.Stderr = os.Stderr
 	process.Env = []string{"PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"}
+	process.SysProcAttr = &syscall.SysProcAttr{
+		Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
+	}
 
 	process.Run()
 	pid := process.Process.Pid
@@ -50,6 +54,23 @@ func NewLocker(name string, command []string) Locker {
 		Command:    command,
 		Process:    process,
 		Filesystem: fs,
+	}
+}
+
+// SpawnChild should create an isolated process for us forked from our Locker process
+func (locker *Locker) SpawnChild() {
+	syscall.Mount(locker.Filesystem.Path, locker.Filesystem.Path, "", syscall.MS_BIND, "")
+	os.MkdirAll(locker.Filesystem.Path, 0700)
+	os.Chdir("/")
+
+	cmd := exec.Command(os.Args[2], os.Args[3:]...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	if err := cmd.Run(); err != nil {
+		fmt.Println("ERROR", err)
+		os.Exit(1)
 	}
 }
 
