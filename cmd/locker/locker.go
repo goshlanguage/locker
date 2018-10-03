@@ -38,5 +38,6 @@ func main() {
 	rootCmd := newRootCmd(os.Args)
 	rootCmd.AddCommand(newRunCmd(os.Args))
 	rootCmd.AddCommand(newVersionCmd(os.Args))
+	rootCmd.AddCommand(newForkCmd(os.Args))
 	rootCmd.Execute()
 }

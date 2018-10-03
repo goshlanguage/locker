@@ -31,14 +31,14 @@ func NewLocker(name string, command []string) Locker {
 	}
 	id := uuid.NewV4().String()
 
-	process := exec.Command("/proc/self/exe", append([]string{"child"}, command[1:]...)...)
+	process := exec.Command("/proc/self/exe", append([]string{"fork"}, command[:]...)...)
 
 	process.Stdin = os.Stdin
 	process.Stdout = os.Stdout
 	process.Stderr = os.Stderr
-	process.Env = []string{"PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"}
 	process.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
+		Cloneflags:   syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
+		Unshareflags: syscall.CLONE_NEWNS,
 	}
 
 	process.Run()
@@ -57,23 +57,6 @@ func NewLocker(name string, command []string) Locker {
 	}
 }
 
-// SpawnChild should create an isolated process for us forked from our Locker process
-func (locker *Locker) SpawnChild() {
-	syscall.Mount(locker.Filesystem.Path, locker.Filesystem.Path, "", syscall.MS_BIND, "")
-	os.MkdirAll(locker.Filesystem.Path, 0700)
-	os.Chdir("/")
-
-	cmd := exec.Command(os.Args[2], os.Args[3:]...)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	if err := cmd.Run(); err != nil {
-		fmt.Println("ERROR", err)
-		os.Exit(1)
-	}
-}
-
 // Run takes a locker and runs the contents of args in an isolated environment
 func (locker *Locker) Run() {
 	fmt.Printf("Command: %v\n", strings.Join(locker.Command, " "))
@@ -84,4 +67,32 @@ func (locker *Locker) Run() {
 	}
 	locker.PID = locker.Process.Process.Pid
 	fmt.Println("Container ran as PID: %i", locker.PID)
+}
+
+// Fork should create an isolated process for us forked from our Locker process
+func Fork(args []string) {
+
+	// implement filesystem namespace
+	//syscall.Mount(locker.Filesystem.Path, "/", "", syscall.MS_BIND, "")
+	//os.MkdirAll(locker.Filesystem.Path, 0700)
+	// os.Chdir("/")
+
+	fmt.Printf("Forking: %s\n", args)
+
+	cmd := exec.Command(args[0])
+	if len(args) > 1 {
+		cmd = exec.Command(args[0], strings.Join(args[1:], " "))
+	}
+
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = []string{"PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"}
+
+	syscall.Sethostname([]byte("locker"))
+
+	if err := cmd.Run(); err != nil {
+		fmt.Println("ERROR", err)
+		os.Exit(1)
+	}
 }

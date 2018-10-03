@@ -16,7 +16,25 @@ Let's start with the two fundmental components of a container, namespaces and cg
 
 # Caveats #
 
-Currently, Mac OS doesn't support a lot of the features that are required for good namespace isolation, such as mounts and more. For that reason, this ships with a docker container. Is it super ironic to use a container runtime to build a container runtime? We didn't think so either.  
+Currently, Mac OS doesn't support a lot of the features that are required for good namespace isolation, such as mounts and more. For that reason, this ships with a vagrant and a docker container. 
+
+To use the Vagrant run:
+```sh
+vagrant up locker
+vagrant ssh locker
+cd go/src/github.com/ryanhartje/locker/
+make build
+./bin/locker run /bin/bash
+```
+
+To use Docker run:
+```sh
+docker build -t locker .
+docker run --rm -d --name locker locker sleep 3600
+docker exec -ti locker /bin/bash
+```
+
+This will give you access to the workspace in an environment suited for testing/experimentation.
 
 
 # Namespaces #
