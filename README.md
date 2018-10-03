@@ -5,7 +5,7 @@ Locker
 
 Locker is a container runtime example to show you that containers are just processes with isolation. We can provide this isolation simply, in a way that's easy to demonstrate.
 
-This project is inspired by Liz Rice's talk, [Containers from Scratch](https://www.youtube.com/watch?v=Utf-A4rODH8). Sadly, some components of her talk are out of date since things like syscall.SysProcAttr.Cloneflags have been deprecated.
+This project is inspired by Liz Rice's talk, [Containers from Scratch](https://www.youtube.com/watch?v=Utf-A4rODH8). 
 
 See also:
 - [Cgroups, Namespaces, & Beyond](https://www.youtube.com/watch?v=sK5i-N34im8) - Jeromme Petazonni
