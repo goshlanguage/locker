@@ -14,29 +14,6 @@ See also:
 
 Let's start with the two fundmental components of a container, namespaces and cgroups. 
 
-# Caveats #
-
-Currently, Mac OS doesn't support a lot of the features that are required for good namespace isolation, such as mounts and more. For that reason, this ships with a vagrant and a docker container. 
-
-To use the Vagrant run:
-```sh
-vagrant up locker
-vagrant ssh locker
-cd go/src/github.com/ryanhartje/locker/
-make build
-./bin/locker run /bin/bash
-```
-
-To use Docker run:
-```sh
-docker build -t locker .
-docker run --rm -d --name locker locker sleep 3600
-docker exec -ti locker /bin/bash
-```
-
-This will give you access to the workspace in an environment suited for testing/experimentation.
-
-
 # Namespaces #
 
 A namespace is a scope of resource that something has access to. There are 6 common types of namespaces:
@@ -62,6 +39,30 @@ Controls groups are the other essential element of a container runtime. What do 
 In addition to resource limiting, control groups can be used to prioritize access to resources such as CPU and Disk, it can be used for accounting if you need to measure a group's resources, and it can be used to control a groups' processes, to do things like checkpoint and restart processes.
 
 This example uses no control groups as to remove complexity from this example.
+
+
+# Caveats #
+
+Currently, Mac OS doesn't support a lot of the features that are required for good namespace isolation, such as mounts and more. For that reason, this ships with a vagrant and a docker container. 
+
+To use the Vagrant run:
+```sh
+vagrant up locker
+vagrant ssh locker
+cd go/src/github.com/ryanhartje/locker/
+make build
+./bin/locker run /bin/bash
+```
+
+To use Docker run:
+```sh
+docker build -t locker .
+docker run --rm -d --name locker locker sleep 3600
+docker exec -ti locker /bin/bash
+```
+
+This will give you access to the workspace in an environment suited for testing/experimentation.
+
 
 # Getting started #
 
