@@ -56,7 +56,10 @@ func (l *LockerOpts) Build() Locker {
 
 	syscall.Mount(fs.Path, "/", "", syscall.MS_BIND, "")
 	os.MkdirAll(fs.Path, 0700)
-	os.Chdir(fs.Path)
+	// When we have a mechanism for copying a base image, we can provide filesystem isolation
+	// 	initially by Chrooting the filesystem. Until then, let's chdir into the directory
+	// syscall.Chroot(fs.Path)
+	syscall.Chdir(fs.Path)
 
 	return Locker{
 		PID:        0,
