@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |config|
-  config.vm.define "vagrant.locker"
+  config.vm.define "locker"
   config.vm.box = "ubuntu/trusty64"
-  config.vm.hostname = "locker"
+  config.vm.hostname = "vagrant.locker"
   config.vm.network :private_network, ip: "192.168.100.42"
   config.vm.synced_folder ".", "/home/vagrant/go/src/github.com/ryanhartje/locker/"
 
