@@ -1,5 +1,7 @@
 ![Locker](locker.png)
 
+![status](https://travis-ci.org/RyanHartje/locker.svg?branch=master)
+
 Locker
 ===
 
