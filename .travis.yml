@@ -2,5 +2,10 @@ language: go
 go:
     - "1.9"
     - "1.10"	
-install: make deps 
-script: make test
+install: 
+	- go get -u github.com/golang/dep/cmd/dep
+	- dep ensure
+	- go test -v ./pkg/locker
+	- go test -v ./cmd/locker
+script: 
+	- go build ./cmd/locker/
