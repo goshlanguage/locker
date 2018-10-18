@@ -8,7 +8,7 @@ func TestLockerStructDefaults(t *testing.T) {
 	opts := LockerOpts{
 		Name:     "testy_timothy",
 		Env:      []string{""},
-		Command:  []string{"echo", "hi"},
+		Command:  []string{"/bin/echo", "hi"},
 		Hostname: "testy_timothy",
 	}
 	l := opts.Build()
