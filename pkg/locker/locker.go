@@ -39,11 +39,17 @@ func (l *LockerOpts) Build() Locker {
 	// Really, we should be Forking a process to run our command in
 	// However, then we don't have access to our Locker struct
 	// process := exec.Command("/proc/self/exe", append([]string{"fork"}, l.Command[:]...)...)
-	process := exec.Command(strings.Join(l.Command, " "))
+	process := exec.Command(l.Command[0])
+	if len(l.Command) > 1 {
+		process = exec.Command(l.Command[0], strings.Join(l.Command[1:], " "))
+	}
 
 	process.Stdin = os.Stdin
 	process.Stdout = os.Stdout
 	process.Stderr = os.Stderr
+	if l.Env != nil {
+		process.Env = l.Env
+	}
 	process.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags:   syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
 		Unshareflags: syscall.CLONE_NEWNS,
@@ -54,7 +60,7 @@ func (l *LockerOpts) Build() Locker {
 	id := uuid.NewV4().String()
 	fs := NewFilesystem(id)
 
-	syscall.Mount(fs.Path, "/", "", syscall.MS_BIND, "")
+	// syscall.Mount(fs.Path, "/", "", syscall.MS_BIND, "")
 	os.MkdirAll(fs.Path, 0700)
 	// When we have a mechanism for copying a base image, we can provide filesystem isolation
 	// 	initially by Chrooting the filesystem. Until then, let's chdir into the directory
@@ -74,12 +80,12 @@ func (l *LockerOpts) Build() Locker {
 func (locker *Locker) Run() {
 	fmt.Printf("Command: %v\n", strings.Join(locker.Config.Command, " "))
 
-	if err := locker.Process.Run(); err != nil {
+	if err := locker.Process.Start(); err != nil {
 		fmt.Println("ERROR: ", err)
 		os.Exit(1)
 	}
 	locker.PID = locker.Process.Process.Pid
-	fmt.Printf("Container %s ran as PID: %i\n", locker.ID, locker.PID)
+	fmt.Printf("Container %s ran as PID: %d\n", locker.ID, locker.PID)
 
 	locker.Filesystem.RemoveFilesystem()
 }
