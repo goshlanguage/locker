@@ -7,8 +7,7 @@ RUN mkdir -p /go/src/github.com/ryanhartje/locker/ && \
 COPY . /go/src/github.com/ryanhartje/locker/
 
 RUN cd /go/src/github.com/ryanhartje/locker && \
-    dep ensure -vendor-only && \
-    go test ./pkg/locker ./cmd/locker
+    dep ensure -vendor-only
 
 WORKDIR /go/src/github.com/ryanhartje/locker/
 

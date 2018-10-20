@@ -8,5 +8,5 @@ sudo: required
 install:
     - make deps
 script:
-    - make docker-build
-    - make docker-test
+    - make test
+    - make build
