@@ -14,7 +14,7 @@ docker-build:
 	docker build -t locker .
 
 docker-test:
-	docker run golang:latest cd /go/src/github.com/ryanhartje/locker && go test ./pkg/locker ./cmd/locker
+	docker run golang:latest cd /go/src/github.com/ryanhartje/locker && bash ./test.sh
 
 test:
-	go test -race -coverprofile=coverage.txt -covermode=atomic -v ./pkg/locker ./cmd/locker
+	bash ./test.sh
