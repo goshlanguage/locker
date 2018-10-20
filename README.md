@@ -1,6 +1,7 @@
 ![Locker](locker.png)
 
 [![Build Status](https://travis-ci.org/ryanhartje/locker.svg?branch=master)](https://travis-ci.org/ryanhartje/locker)
+[![codecov](https://codecov.io/gh/ryanhartje/locker/branch/master/graph/badge.svg)](https://codecov.io/gh/ryanhartje/locker)
 
 Locker
 ===
