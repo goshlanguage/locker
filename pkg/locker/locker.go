@@ -27,19 +27,16 @@ type Locker struct {
 	Config     *LockerOpts
 }
 
-// NewLocker is a builder for lockers. If you're unfamiliar with the builder patterns, see:
+// Build is a locker builder. If you're unfamiliar with the builder pattern, see:
 //		https://github.com/tmrts/go-patterns/blob/master/creational/builder.md
 //
-// NewLocker spawns a new child process in order to apply namespaces and cgroups
-// 		to the process. This is known as "fork() and exec()". SysProcAttr
-//
-//
+// Build spawns a new child process in order to apply namespaces and cgroups
+// 		to our command.
 func (l *LockerOpts) Build() Locker {
-
-	// Really, we should be Forking a process to run our command in
-	// However, then we don't have access to our Locker struct
-	// process := exec.Command("/proc/self/exe", append([]string{"fork"}, l.Command[:]...)...)
-	process := exec.Command(strings.Join(l.Command, " "))
+	process := exec.Command(l.Command[0])
+	if len(l.Command) > 1 {
+		process = exec.Command(l.Command[0], strings.Join(l.Command[1:], " "))
+	}
 
 	process.Stdin = os.Stdin
 	process.Stdout = os.Stdout
@@ -79,7 +76,7 @@ func (locker *Locker) Run() {
 		os.Exit(1)
 	}
 	locker.PID = locker.Process.Process.Pid
-	fmt.Printf("Container %s ran as PID: %i\n", locker.ID, locker.PID)
+	fmt.Printf("Container %s ran as PID: %d\n", locker.ID, locker.PID)
 
 	locker.Filesystem.RemoveFilesystem()
 }

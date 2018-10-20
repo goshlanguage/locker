@@ -6,7 +6,13 @@ import (
 
 func TestLockerStructDefaults(t *testing.T) {
 
-	l := NewLocker("", []string{"echo", "hi"})
+	opts := LockerOpts{
+		Name:     "testy_timothy",
+		Command:  []string{"echo", "hi"},
+		Hostname: "testy_timothy",
+	}
+	l := opts.Build()
+	l.Run()
 
 	if l.PID == 0 {
 		t.Errorf("Locker run failed to obtain a PID")
