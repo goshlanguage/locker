@@ -7,14 +7,15 @@ RUN mkdir -p /go/src/github.com/ryanhartje/locker/ && \
 COPY . /go/src/github.com/ryanhartje/locker/
 
 RUN cd /go/src/github.com/ryanhartje/locker && \
-    dep ensure -vendor-only
+    dep ensure -vendor-only && \
+    go test ./pkg/locker ./cmd/locker
 
 WORKDIR /go/src/github.com/ryanhartje/locker/
 
 RUN make build
 
 
-FROM debian:stretch-slim  
+FROM debian:stretch-slim
 
 COPY --from=0 /go/src/github.com/ryanhartje/locker/bin/locker /bin/locker
 RUN chmod +x /bin/locker

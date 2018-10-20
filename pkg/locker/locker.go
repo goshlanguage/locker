@@ -42,8 +42,9 @@ func (l *LockerOpts) Build() Locker {
 	process.Stdout = os.Stdout
 	process.Stderr = os.Stderr
 	process.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags:   syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
-		Unshareflags: syscall.CLONE_NEWNS,
+		//Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
+		Ptrace: false,
+		// Unshareflags: syscall.CLONE_NEWNS,
 	}
 
 	syscall.Sethostname([]byte(l.Hostname))

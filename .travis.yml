@@ -1,13 +1,12 @@
 language: go
 go:
-    - "1.8"
-    - "1.9"
-    - "1.10"
+    - 1.10
+    - 1.11
 services:
     - docker
 sudo: required
 install:
     - make deps
 script:
-    - make test
-    - make build
+    - make docker-build
+    - make docker-test

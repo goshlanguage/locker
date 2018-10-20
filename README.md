@@ -1,18 +1,19 @@
 ![Locker](locker.png)
+![status](https://travis-ci.org/RyanHartje/locker.svg?branch=master)
 
 Locker
 ===
 
 Locker is a container runtime example to show you that containers are just processes with isolation. We can provide this isolation simply, in a way that's easy to demonstrate.
 
-This project is inspired by Liz Rice's talk, [Containers from Scratch](https://www.youtube.com/watch?v=Utf-A4rODH8). 
+This project is inspired by Liz Rice's talk, [Containers from Scratch](https://www.youtube.com/watch?v=Utf-A4rODH8).
 
 See also:
 - [Cgroups, Namespaces, & Beyond](https://www.youtube.com/watch?v=sK5i-N34im8) - Jeromme Petazonni
 - [Building containers in Pure Bash and C](https://containersummit.io/events/nyc-2016/videos/building-containers-in-pure-bash-and-c) - Jessie Frazzelle
 
 
-Let's start with the two fundmental components of a container, namespaces and cgroups. 
+Let's start with the two fundmental components of a container, namespaces and cgroups.
 
 # Namespaces #
 
@@ -43,7 +44,7 @@ This example uses no control groups as to remove complexity from this example.
 
 # Caveats #
 
-Currently, Mac OS doesn't support a lot of the features that are required for good namespace isolation, such as mounts and more. For that reason, this ships with a vagrant and a docker container. 
+Currently, Mac OS doesn't support a lot of the features that are required for good namespace isolation, such as mounts and more. For that reason, this ships with a vagrant and a docker container.
 
 To use the Vagrant run:
 ```sh
@@ -113,5 +114,5 @@ bash-3.2$ whoami
 ryan
 ```
 
-As we can see, if I just exec /bin/bash in a forked process, it initially provides no isolation. No big suprise but now we have something we can build on. 
+As we can see, if I just exec /bin/bash in a forked process, it initially provides no isolation. No big suprise but now we have something we can build on.
 
