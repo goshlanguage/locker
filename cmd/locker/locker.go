@@ -14,7 +14,7 @@ locker is a simple lightweight container runtime. This is mostly for example, pl
 
 locker provides the following namespacing:
 - Unix TimeSharing system [https://people.eecs.berkeley.edu/~brewer/cs262/unix.pdf]
--- Filesystem 
+-- Filesystem
 --- Process IDs
 --- Users
 - IPC
