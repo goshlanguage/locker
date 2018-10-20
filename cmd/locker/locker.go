@@ -24,8 +24,8 @@ locker provides the following namespacing:
 func newRootCmd(args []string) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "locker",
-		Short: "locker is a lightweight container runtime.",
-		Long:  "locker is a lightweight container runtime. Do not use this in production.",
+		Short: "locker is a container.",
+		Long:  "locker is a container. Not intended for any real usage.",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println(usage)
 		},

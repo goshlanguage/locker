@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell",
     inline: "sudo add-apt-repository ppa:gophers/archive -y;"
 
-  # Install a go that's not horribly outdated 
+  # Install a go that's not horribly outdated
   config.vm.provision "shell",
     inline: "apt update && apt install -y golang-1.10 git"
 
@@ -20,9 +20,5 @@ Vagrant.configure("2") do |config|
   # set $GOPATH
   config.vm.provision "shell",
     inline: "echo 'export GOPATH=/go' >> /root/.bashrc;"
-
-  # set WORKDIR [hack]
-  config.vm.provision "shell",
-    inline: "echo 'cd go/src/github.com/ryanhartje/locker' >> /root/.bashrc;"
 
 end
